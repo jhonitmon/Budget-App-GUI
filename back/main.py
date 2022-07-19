@@ -1,7 +1,13 @@
 # library imports
-import datetime
+from datetime import datetime
 import pandas as pd
+import calendar
 from pathlib import Path
+from pprint import pprint
+import random as rand
+from random import randrange
+from datetime import timedelta
+import json
 
 # class declaration
 class budget:
@@ -85,8 +91,8 @@ class budget:
             while True:
                 if date != None:
                     try:
-                        date = date.split(".",3)
-                        newdate = datetime.datetime(int(date[2]),int(date[1]),int(date[0]))
+                        date = date.split(".")
+                        newdate = datetime(int(date[2]),int(date[1]),int(date[0]))
                         break
                     except:
                         print("Please enter a valid date.")
@@ -94,14 +100,14 @@ class budget:
                 date = input("Please enter the date in the [\"dd.mm.yyyy\"] format: ")
                 
                 try:
-                    newdate = datetime.datetime(int(date[2]),int(date[1]),int(date[0]))
+                    newdate = datetime(int(date[2]),int(date[1]),int(date[0]))
                 except:
                     print("Please enter a valid date.")
                     continue
                 break
             
             # check if break or continue
-            print("Data succesfully added!")
+            # print("Data succesfully added!")
             while True:
                 if skip == 1:
                     ans = "n"
@@ -114,9 +120,10 @@ class budget:
 
             # dataframe update
             added_data = pd.DataFrame(data={"reference" : [ref], "date" : [newdate], "amount" : [amount], "type" : [sclass]})
-            self.tally = pd.concat([self.tally,added_data], ignore_index=True)
+            self.tally = pd.concat([self.tally,added_data], ignore_index=True).sort_values("date")
             if ans.lower() != "n":    
                 continue
+
             break
     
     # sum per day method implementation
@@ -126,7 +133,7 @@ class budget:
                 date = input("Please enter the desired date in the [\"dd.mm.yyyy\"] format: ")
             try:
                 date = date.split(".",3)
-                date = datetime.datetime(int(date[2]),int(date[1]),int(date[0]))
+                date = datetime(int(date[2]),int(date[1]),int(date[0]))
                 break
             except:
                 print("Please enter a valid date.")
@@ -200,16 +207,109 @@ class budget:
             sum = new_df["amount"].sum()
             print(sum, "type")
             break
+    
+    # summarize method
+    def summarize(self):
+        year_dict = dict()
+        year_df = self.tally
+        month_names = list(calendar.month_name)
+        year_df["year"] = self.tally["date"].dt.year
+        date_today = datetime.today()
+        for i in year_df.year.unique():
+            year_dict[str(i)] = {
+                "max_i": 0,
+                "max_e": 0,
+                "avg_d_i": 0,
+                "avg_d_e": 0,
+                "avg_d_t": 0,
+                "months" : {},
+                "avg_m_i": 0,
+                "avg_m_e": 0,
+                "avg_m_t": 0,
+                "best_m": 0,
+                "worst_m": 0,
+                "i_year": 0,
+                "e_year": 0,
+                "total": 0,
+                "max_i_type": 0,
+                "max_e_type": 0
+                }
+            year_items = self.tally[self.tally.date.dt.year == i]
+            year_incomes = year_items[year_items.amount > 0]
+            year_expenses = year_items[year_items.amount < 0]
+
+            max_iitem = year_items[year_items.amount == year_items.amount.max()].iloc[0,:]
+            max_eitem = year_items[year_items.amount == year_items.amount.min()].iloc[0,:]
+
+            if i == date_today.year:
+                n_days = (date_today - date_today.replace(month=1, day=1)).days
+                n_months = date_today.month
+
+            else:
+                n_days = 365
+                n_months = 12
+            
+            avg_d_t = year_items.amount.sum() / n_days
+            avg_d_i = year_incomes.amount.sum() / n_days
+            avg_d_e = year_expenses.amount.sum() / n_days
+            avg_m_t = year_items.amount.sum() / n_months
+            avg_m_i = year_incomes.amount.sum() / n_months
+            avg_m_e = year_expenses.amount.sum() / n_months
+            month_list = year_df[["date","amount"]]
+            month_list["month"] = month_list.date.dt.month
+            month_group = month_list.groupby("month").sum()
+            for j in range(1,n_months + 1):
+                name = month_names[j]
+                iter_list = month_list[month_list.month == j]
+                iter_incomes = iter_list[iter_list.amount > 0]
+                iter_expenses = iter_list[iter_list.amount < 0]
+                year_dict[str(i)]["months"][name]= {
+                    "total": iter_list.amount.sum(),
+                    "e_month": iter_incomes.amount.sum(),
+                    "i_month": iter_expenses.amount.sum()}
+            year_dict[str(i)]["max_i"] = max_iitem.amount
+            year_dict[str(i)]["max_e"] = max_eitem.amount
+            year_dict[str(i)]["max_i_type"] = max_iitem.type
+            year_dict[str(i)]["max_e_type"] = max_eitem.type
+            year_dict[str(i)]["i_year"] = year_incomes.amount.sum()
+            year_dict[str(i)]["e_year"] = year_expenses.amount.sum()
+            year_dict[str(i)]["total"] = year_items.amount.sum()
+            year_dict[str(i)]["avg_d_t"] = round(avg_d_t,2)
+            year_dict[str(i)]["avg_d_i"] = round(avg_d_i,2)
+            year_dict[str(i)]["avg_d_e"] = round(avg_d_e,2)
+            year_dict[str(i)]["avg_m_t"] = round(avg_m_t,2)
+            year_dict[str(i)]["avg_m_i"] = round(avg_m_i,2)
+            year_dict[str(i)]["avg_m_e"] = round(avg_m_e,2)
+            best_m = month_group.amount.max()
+            worst_m = month_group.amount.min()
+            year_dict[str(i)]["best_m"] = round(avg_m_e,2)
+        
+        pprint(year_dict, sort_dicts=False)
+        return year_dict
 
 
 budget = budget()
-budget.add_data("Trattoria",800,1,"20.11.2022",1)
-budget.add_data("Burger king",-15,5,"20.11.2022",1)
-budget.add_data("Tips",100,2,"22.11.2022",1)
-budget.sum_day("20.11.2022")
-budget.sum_month("11.2022")
-budget.sum_year("2022")
-budget.sum_type(1,1)
+
+def random_date(start, end):
+    delta = end - start
+    int_delta = (delta.days * 24 * 60 * 60) + delta.seconds
+    random_second = randrange(int_delta)
+    return start + timedelta(seconds=random_second)
+
+d1 = datetime.strptime('1/1/2000 1:30 AM', '%m/%d/%Y %I:%M %p')
+d2 = datetime.today()
+for i in range(1,10000):
+    ramount = rand.randint(-10000,10000)
+    rtype = rand.randint(1,2)
+    rref = str(i)
+    rdate = random_date(d1,d2).replace(hour=0,minute=0,second=0)
+    rdate = rdate.strftime("%d.%m.%Y")
+    budget.add_data(ref=rref,amount=ramount,type=rtype,date = rdate,skip=1)
+# budget.sum_year("2021")
+# budget.sum_type(1,1)
+dict = budget.summarize()
 
 # save data in csv
 budget.tally.to_csv("data/budget.csv", index=False)
+with open("data/jsontest.txt","w", encoding="utf-8") as f:
+    json.dump(dict,f,ensure_ascii=False, indent= 4)
