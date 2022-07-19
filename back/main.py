@@ -219,20 +219,26 @@ class budget:
             year_dict[str(i)] = {
                 "max_i": 0,
                 "max_e": 0,
+
                 "avg_d_i": 0,
                 "avg_d_e": 0,
                 "avg_d_t": 0,
-                "months" : {},
+                
+                
                 "avg_m_i": 0,
                 "avg_m_e": 0,
                 "avg_m_t": 0,
-                "best_m": 0,
-                "worst_m": 0,
+                
                 "i_year": 0,
                 "e_year": 0,
                 "total": 0,
+
                 "max_i_type": 0,
-                "max_e_type": 0
+                "max_e_type": 0,
+
+                "best_m": 0,
+                "worst_m": 0,
+                "months" : {}
                 }
             year_items = self.tally[self.tally.date.dt.year == i]
             year_incomes = year_items[year_items.amount > 0]
@@ -257,7 +263,7 @@ class budget:
             avg_m_e = year_expenses.amount.sum() / n_months
             month_list = year_df[["date","amount"]]
             month_list["month"] = month_list.date.dt.month
-            month_group = month_list.groupby("month").sum()
+            month_group = month_list.groupby("month",as_index=False).sum()
             for j in range(1,n_months + 1):
                 name = month_names[j]
                 iter_list = month_list[month_list.month == j]
@@ -280,11 +286,12 @@ class budget:
             year_dict[str(i)]["avg_m_t"] = round(avg_m_t,2)
             year_dict[str(i)]["avg_m_i"] = round(avg_m_i,2)
             year_dict[str(i)]["avg_m_e"] = round(avg_m_e,2)
-            best_m = month_group.amount.max()
-            worst_m = month_group.amount.min()
-            year_dict[str(i)]["best_m"] = round(avg_m_e,2)
+            best_m = month_group[month_group.amount == month_group.amount.max()].month.iloc[0]
+            worst_m = month_group[month_group.amount == month_group.amount.min()].month.iloc[0]
+            year_dict[str(i)]["best_m"] = month_names[best_m]
+            year_dict[str(i)]["worst_m"] = month_names[worst_m]
         
-        pprint(year_dict, sort_dicts=False)
+        # pprint(year_dict, sort_dicts=False)
         return year_dict
 
 
@@ -300,16 +307,20 @@ d1 = datetime.strptime('1/1/2000 1:30 AM', '%m/%d/%Y %I:%M %p')
 d2 = datetime.today()
 for i in range(1,10000):
     ramount = rand.randint(-10000,10000)
-    rtype = rand.randint(1,2)
+    if ramount > 0:
+        rtype = rand.randint(1,len(budget.itypes))
+    else:
+        rtype = rand.randint(1,len(budget.etypes))
     rref = str(i)
     rdate = random_date(d1,d2).replace(hour=0,minute=0,second=0)
     rdate = rdate.strftime("%d.%m.%Y")
     budget.add_data(ref=rref,amount=ramount,type=rtype,date = rdate,skip=1)
+
 # budget.sum_year("2021")
 # budget.sum_type(1,1)
 dict = budget.summarize()
 
 # save data in csv
 budget.tally.to_csv("data/budget.csv", index=False)
-with open("data/jsontest.txt","w", encoding="utf-8") as f:
+with open("data/jsontest.json","w", encoding="utf-8") as f:
     json.dump(dict,f,ensure_ascii=False, indent= 4)
