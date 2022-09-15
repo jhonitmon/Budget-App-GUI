@@ -1,0 +1,192 @@
+[
+    {
+        "id": "9103",
+        "amount": 3829,
+        "type": "Salary",
+        "date": "2022.08.02",
+        "day": 2,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "6671",
+        "amount": -3388,
+        "type": "Subscriptions",
+        "date": "2022.08.03",
+        "day": 3,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "1391",
+        "amount": -7396,
+        "type": "Leisure",
+        "date": "2022.08.03",
+        "day": 3,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "2033",
+        "amount": 7586,
+        "type": "Salary",
+        "date": "2022.08.04",
+        "day": 4,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "4188",
+        "amount": 3931,
+        "type": "Salary",
+        "date": "2022.08.04",
+        "day": 4,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "6208",
+        "amount": -2085,
+        "type": "Investments",
+        "date": "2022.08.05",
+        "day": 5,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "984",
+        "amount": 5018,
+        "type": "Other",
+        "date": "2022.08.05",
+        "day": 5,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "1685",
+        "amount": 8848,
+        "type": "Salary",
+        "date": "2022.08.05",
+        "day": 5,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "4535",
+        "amount": 5217,
+        "type": "Tips",
+        "date": "2022.08.06",
+        "day": 6,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "5764",
+        "amount": -1183,
+        "type": "Health Insurance",
+        "date": "2022.08.07",
+        "day": 7,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "9290",
+        "amount": -7361,
+        "type": "Investments",
+        "date": "2022.08.09",
+        "day": 9,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "3483",
+        "amount": 6689,
+        "type": "Tips",
+        "date": "2022.08.09",
+        "day": 9,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "7446",
+        "amount": -4842,
+        "type": "Food",
+        "date": "2022.08.10",
+        "day": 10,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "1631",
+        "amount": 3603,
+        "type": "Other",
+        "date": "2022.08.10",
+        "day": 10,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "4545",
+        "amount": -4805,
+        "type": "Food",
+        "date": "2022.08.11",
+        "day": 11,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "5321",
+        "amount": 5476,
+        "type": "Salary",
+        "date": "2022.08.12",
+        "day": 12,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "4309",
+        "amount": 2702,
+        "type": "Tips",
+        "date": "2022.08.12",
+        "day": 12,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "7879",
+        "amount": 9591,
+        "type": "Other",
+        "date": "2022.08.15",
+        "day": 15,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    },
+    {
+        "id": "4510",
+        "amount": 3021,
+        "type": "Tips",
+        "date": "2022.08.15",
+        "day": 15,
+        "long_month": "August",
+        "short_month": 8,
+        "year": 2022
+    }
+]
